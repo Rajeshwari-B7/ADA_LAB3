@@ -1,0 +1,145 @@
+//  selection sort
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main()
+{
+    int i, j, count, temp;
+    float start, end;
+
+    printf("How many numbers u are going to enter?: ");
+    scanf("%d", &count);
+    int number[count];
+
+    for (i = 0; i < count; i++)
+        number[i] = rand();
+    start = clock();
+    for (i = 1; i < count; i++)
+    {
+        temp = number[i];
+        j = i - 1;
+        while ((temp < number[j]) && (j >= 0))
+        {
+            number[j + 1] = number[j];
+            j = j - 1;
+        }
+        number[j + 1] = temp;
+    }
+    end=clock();
+    printf("\n Time taken to sort %d numbers is %f Secs",count, (((double)(end-start))/CLOCKS_PER_SEC));
+    return 0;
+}
+
+//  insertion sort
+
+#include<stdio.h>
+#include<stdlib.h>
+#include <time.h>
+
+
+int main(){
+   int i, j, count, temp;
+   float start,end;
+
+   printf("How many numbers u are going to enter?: ");
+   scanf("%d",&count);
+   int number[count];
+
+   for(i=0;i<count;i++)
+        number[i]=rand();
+    start=clock();
+   for(i=0;i<count;i++){
+      for(j=i+1;j<count;j++){
+         if(number[i]>number[j]){
+            temp=number[i];
+            number[i]=number[j];
+            number[j]=temp;
+         }
+      }
+   }
+    end=clock();
+    printf("\n Time taken to sort %d numbers is %f Secs",count, (((double)(end-start))/CLOCKS_PER_SEC));
+   return 0;
+}
+
+//  Recursive binarySearch
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int binarySearch(int arr[], int l, int r, int x)
+{
+	if (r >= l) {
+		int mid = l + (r - l) / 2;
+		if (arr[mid] == x)
+			return mid;
+		if (arr[mid] > x)
+			return binarySearch(arr, l, mid - 1, x);
+		return binarySearch(arr, mid + 1, r, x);
+	}
+	return -1;
+}
+
+int main(void)
+{
+	int n,i,key;
+   float start,end;
+	printf("Enter the number of elements\n");
+    scanf("%d",&n);
+    int arr[n];
+    for(i=0;i<n;i++)
+        arr[i]=rand();
+    printf("Enter the element to search\n");
+    scanf("%d",&key);
+    start=clock();
+	int result = binarySearch(arr, 0, n - 1, key);
+    end=clock();
+    if(result==-1)
+        printf("Element is not present in array");
+    else
+        printf("Element is present at index %d",result);
+    printf("\n Time taken to sort %d numbers is %f Secs",n, (((double)(end-start))/CLOCKS_PER_SEC));
+	return 0;
+}
+
+//  Recursive linearSearch
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+int linearSearch(int arr[], int l, int n, int x)
+{
+	if (l >= n) {
+		if (arr[l] == x)
+			return l;
+		return linearSearch(arr, l + 1, n, x);
+	}
+	return -1;
+}
+
+int main(void)
+{
+	int n,i,key;
+   float start,end;
+	printf("Enter the number of elements\n");
+    scanf("%d",&n);
+    int arr[n];
+    for(i=0;i<n;i++)
+        arr[i]=rand();
+    printf("Enter the element to search\n");
+    scanf("%d",&key);
+    start=clock();
+	int result = linearSearch(arr, 0, n - 1, key);
+    end=clock();
+    if(result==-1)
+        printf("Element is not present in array");
+    else
+        printf("Element is present at index %d",result);
+    printf("\n Time taken to sort %d numbers is %f Secs",n, (((double)(end-start))/CLOCKS_PER_SEC));
+	return 0;
+}
