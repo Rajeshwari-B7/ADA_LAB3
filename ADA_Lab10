@@ -1,0 +1,227 @@
+/*Warshall*/
+
+#include<stdio.h>
+#include<stdlib.h>
+
+void transitiveClosure(int A[10][10],int n)
+{
+    int path[n][n];     
+    int i,j,k;
+    
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            path[i][j] = A[i][j];
+        }
+    }
+    
+    for(k=0;k<n;k++)        
+    {
+        for(i=0;i<n;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                if(path[i][j] != 1 && (path[i][k] && path[k][j]))
+                    path[i][j] = 1;
+            }
+        }
+    }
+
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            printf("\t%d",path[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    int A[10][10];
+    int i,j;
+    int n;
+    printf("\nEnter The Number Of Vertices : ");
+    scanf("%d",&n);
+    printf("\nEnter The Graph Data in the form of Adacency Matrix : \n");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&A[i][j]);
+        }
+    }
+    transitiveClosure(A,n);
+    return 0;
+}
+ 
+/* Floyds*/
+
+#include<stdio.h>
+int a[10][10],d[10][10],n;
+void floyds();
+int min(int ,int);
+int main()
+{
+	printf("Enter no of vertices\n");
+	scanf("%d",&n);
+	printf("Enter cost adjacency matrix :\n");
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=n;j++)
+			scanf("%d",&a[i][j]);
+	}
+	floyds();
+	printf("Distance matrix :\n");
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=n;j++)
+			printf("%d ",d[i][j]);
+		printf("\n");
+	}
+}
+
+void floyds()
+{
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=n;j++)
+			d[i][j]=a[i][j];
+	}
+	for(int k=1;k<=n;k++)
+	{
+		for(int i=1;i<=n;i++)
+		{
+			for(int j=1;j<=n;j++)
+			{
+				d[i][j]=min(d[i][j],d[i][k]+d[k][j]);
+			}
+		}
+	}
+}
+int min(int a,int b)
+{
+	if(a<b)
+		return a;
+	else
+		return b;
+}
+
+/*Knapscak */
+
+#include<stdio.h>
+ int max(int a, int b) { return (a > b)? a : b; }
+ int knapSack(int W, int wt[], int val[], int n)
+{
+   int i, w;
+   int K[n+1][W+1];
+ 
+   for (i = 0; i <= n; i++)
+   {
+       for (w = 0; w <= W; w++)
+       {
+           if (i==0 || w==0)
+               K[i][w] = 0;
+           else if (wt[i-1] <= w)
+                 K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
+           else
+                 K[i][w] = K[i-1][w];
+       }
+   }
+ 
+   return K[n][W];
+}
+ 
+int main()
+{
+    int i, n, val[20], wt[20], W;
+    
+    printf("Enter number of items:");
+    scanf("%d", &n);
+    
+    printf("Enter value and weight of items:\n");
+    for(i = 0;i < n; ++i){
+    	scanf("%d%d", &val[i], &wt[i]);
+    }
+ 
+    printf("Enter size of knapsack:");
+    scanf("%d", &W);
+    
+    printf("%d", knapSack(W, wt, val, n));
+    return 0;
+}
+
+/* Prims */
+
+#include<stdio.h>
+int minKey(int key[], int mstSet[],int n) 
+{ 
+    int min = 100, min_index; 
+  int v;
+    for ( v = 0; v < n; v++) 
+        if (mstSet[v] == 0 && key[v] < min) 
+            min = key[v], min_index = v; 
+  
+    return min_index; 
+} 
+
+int printMST(int parent[10], int graph[10][10],int n) 
+{ 
+    int i;
+    printf("Edge \tWeight\n"); 
+    for ( i = 1; i < n; i++) 
+        printf("%d - %d \t%d \n", parent[i], i, graph[i][parent[i]]); 
+} 
+ 
+void primMST(int graph[10][10],int n) 
+{ 
+    
+    int parent[n]; 
+    int key[n]; 
+    int mstSet[n]; 
+    int i,count,v,u;
+  
+   
+    for (i = 0; i < n; i++) 
+        key[i] = 100, mstSet[i] = 0; 
+  
+   
+    key[0] = 0; 
+    parent[0] = -1; 
+  
+   
+    for ( count = 0; count < n - 1; count++) { 
+        
+         u = minKey(key, mstSet,n); 
+  
+        
+        mstSet[u] = 1; 
+  
+        for (v = 0; v < n; v++) 
+  
+            if (graph[u][v] && mstSet[v] == 0 && graph[u][v] < key[v]) 
+                parent[v] = u, key[v] = graph[u][v]; 
+    } 
+  
+    printMST(parent, graph,n); 
+} 
+  
+int main() 
+{ 
+    int graph[10][10];
+    int i,j,n;
+    printf("Enter number of nodes\n");
+    scanf("%d",&n);
+    printf("Enter adjacency matrix\n");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        scanf("%d",&graph[i][j]);
+    }
+    primMST(graph,n); 
+    return 0;
+}
+
+
