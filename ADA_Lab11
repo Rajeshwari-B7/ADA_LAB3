@@ -1,0 +1,262 @@
+/* KRUSKAL */
+
+#include <stdio.h>
+ #include <stdlib.h>
+    int i,j,k,a,b,u,v,n,ne=1;
+    int min,mincost=0,cost[9][9],parent[9];
+  int find(int i)
+    {
+     while(parent[i])
+     i=parent[i];
+     return i;
+    }
+    int uni(int i,int j)
+    {
+     if(i!=j)
+     {
+     parent[j]=i;
+     return 1;
+     }
+     return 0;
+    }
+    void main()
+    {
+     printf("\nEnter the no. of vertices:");
+     scanf("%d",&n);
+     printf("\nEnter the cost adjacency matrix:\n");
+     for(i=1;i<=n;i++)
+     {
+     for(j=1;j<=n;j++)
+     {
+     scanf("%d",&cost[i][j]);
+     if(cost[i][j]==0)
+     cost[i][j]=999;
+     }
+     }
+     printf("The edges of Minimum Cost Spanning Tree are\n");
+     while(ne < n)
+     {
+     for(i=1,min=999;i<=n;i++)
+     {
+     for(j=1;j <= n;j++)
+     {
+     if(cost[i][j] < min)
+     {
+     min=cost[i][j];
+     a=u=i;
+     b=v=j;
+     }
+     }
+     }
+     u=find(u);
+     v=find(v);
+     if(uni(u,v))
+     {
+     printf("%d edge (%d,%d) =%d\n",ne++,a,b,min);
+     mincost +=min;
+     }
+     cost[a][b]=cost[b][a]=999;
+     }
+     printf("\n\tMinimum cost = %d\n",mincost);
+  
+    }
+    
+    
+    /*dijkstra*/
+
+#include <stdio.h> 
+
+int minDistance(int dist[], int sptSet[],int V) 
+{ 
+    int min = 999, min_index; 
+  int v;
+    for ( v = 0; v < V; v++) 
+        if (sptSet[v] == 0 && dist[v] <= min) 
+            min = dist[v], min_index = v; 
+  
+    return min_index; 
+} 
+int printSolution(int dist[],int V )
+{ int i;
+    printf("Vertex \t\t Distance from Source\n"); 
+    for (i = 0; i < V; i++) 
+        printf("%d \t\t %d\n", i, dist[i]); 
+} 
+void dijkstra(int graph[10][10], int src,int V) 
+{ 
+    int dist[V]; 
+  int i,count,u,v;
+    int sptSet[V];
+    for ( i = 0; i < V; i++) 
+        dist[i] = 999, sptSet[i] = 0; 
+  
+    dist[src] = 0; 
+  
+    for ( count = 0; count < V - 1; count++) { 
+         
+        u = minDistance(dist, sptSet,V); 
+        sptSet[u] = 1; 
+  
+        for (v = 0; v < V; v++) 
+  
+            if (!sptSet[v] && graph[u][v] && dist[u] != 999 
+                && dist[u] + graph[u][v] < dist[v]) 
+                dist[v] = dist[u] + graph[u][v]; 
+    } 
+  
+    printSolution(dist,V); 
+} 
+  
+int main() 
+{ 
+    int i,j,V;
+    
+    int graph[10][10]; 
+    printf("Enter number of vertices\n");
+    scanf("%d",&V);
+    printf("Enter adjacency matrix\n");
+    for(i=0;i<V;i++)
+    {
+        for(j=0;j<V;j++)
+    scanf("%d",&graph[i][j]);
+    }
+  
+    dijkstra(graph, 0,V); 
+  
+    return 0; 
+}
+
+
+       /* N queen backtracking */
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+void nqueens(int);
+int place(int[],int);
+void printsolution(int,int[]);
+
+void main()
+{
+    int n;
+    printf("Enter the no.of queens: ");
+    scanf("%d",&n);
+    nqueens(n);
+}
+
+void nqueens(int n)
+{
+    int x[10],count=0,k=1;
+    x[k]=0;
+    while(k!=0)
+    {
+        x[k]=x[k]+1;
+        while(x[k]<=n&&(!place(x,k)))
+        x[k]=x[k]+1;
+        if(x[k]<=n)
+        {
+            if(k==n)
+            {
+                count++;
+                printf("\nSolution %d\n",count);
+                printsolution(n,x);
+            }
+            else
+            {
+                k++;
+                x[k]=0;
+            }
+        }
+        else
+        {
+            k--; //backtracking
+        }
+    }
+    return;
+}
+
+int place(int x[],int k)
+{
+    int i;
+    for(i=1;i<k;i++)
+        if(x[i]==x[k]||(abs(x[i]-x[k]))==abs(i-k))
+            return 0;
+    return 1;
+}
+
+void printsolution(int n,int x[])
+{
+    int i,j;
+    char c[10][10];
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        c[i][j]='X';
+    }
+    for(i=1;i<=n;i++)
+        c[i][x[i]]='Q';
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        {
+            printf("%c\t",c[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+          /* Sum of subset */
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int x[1000],w[1000],d,count=0;
+
+void subset(int cs,int k,int r)
+{
+    int i;
+    x[k]=1;
+    if(cs+w[k]==d)
+    {
+        printf("\nSubset %d\n",++count);
+        for(i=0;i<=k;i++)
+        if(x[i]==1)
+        printf("%d\t",w[i]);
+    }
+    else if(cs+w[k]+w[k+1]<=d)
+        subset(cs+w[k],k+1,r-w[k]);
+    if(cs+r-w[k]>=d && cs+w[k]<=d)
+    {
+        x[k]=0;
+        subset(cs,k+1,r-w[k]);
+    }
+}
+
+int main()
+{
+    int i,n,sum=0;
+    
+    printf("Enter the no. of elements: ");
+    scanf("%d",&n);
+    printf("Enter the elements in ascending order:\n");
+    for(i=0;i<n;i++)
+        scanf("%d",&w[i]);
+    printf("Enter the sum : ");
+    scanf("%d",&d);
+    for(i=0;i<n;i++)
+        sum=sum+w[i];
+    if(sum<d)
+    {
+        printf("No solution\n");
+        exit(0);
+    }
+    subset(0,0,sum);
+    if(count==0)
+    {
+        printf("No solution\n");
+        exit(0);
+    }
+    return 0;
+}
+    
